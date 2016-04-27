@@ -7,7 +7,9 @@ class User < ActiveRecord::Base
 
     after_initialize :ensure_session_token
 
-
+    has_many :alerts
+    has_many :airports
+    has_many :cities, through: :airports
 
     attr_reader :password
 

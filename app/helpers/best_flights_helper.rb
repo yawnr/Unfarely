@@ -1,0 +1,2 @@
+module BestFlightsHelper
+end

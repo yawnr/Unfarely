@@ -1,0 +1,2 @@
+class BestFlightsController < ApplicationController
+end

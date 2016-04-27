@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  departure_airport_id: 1
+  departure_city_id: 1
+  arrival_airport_id: 1
+  arrival_city_id: 1
+  month: 1
+  full_date: 2016-04-27
+  price: 1
+
+two:
+  departure_airport_id: 1
+  departure_city_id: 1
+  arrival_airport_id: 1
+  arrival_city_id: 1
+  month: 1
+  full_date: 2016-04-27
+  price: 1

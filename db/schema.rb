@@ -11,10 +11,79 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427041346) do
+ActiveRecord::Schema.define(version: 20160427134257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "airports", force: :cascade do |t|
+    t.string   "code",          null: false
+    t.string   "name"
+    t.string   "search_string", null: false
+    t.integer  "city_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "airports", ["city_id"], name: "index_airports_on_city_id", using: :btree
+
+  create_table "alerts", force: :cascade do |t|
+    t.integer  "user_id",              null: false
+    t.integer  "departure_airport_id", null: false
+    t.integer  "arrival_airport_id",   null: false
+    t.integer  "price",                null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "alerts", ["arrival_airport_id"], name: "index_alerts_on_arrival_airport_id", using: :btree
+  add_index "alerts", ["departure_airport_id"], name: "index_alerts_on_departure_airport_id", using: :btree
+  add_index "alerts", ["user_id"], name: "index_alerts_on_user_id", using: :btree
+
+  create_table "best_flights", force: :cascade do |t|
+    t.integer  "departure_airport_id", null: false
+    t.integer  "departure_city_id"
+    t.integer  "arrival_airport_id",   null: false
+    t.integer  "arrival_city_id"
+    t.integer  "month",                null: false
+    t.date     "full_date",            null: false
+    t.integer  "price",                null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "best_flights", ["arrival_airport_id"], name: "index_best_flights_on_arrival_airport_id", using: :btree
+  add_index "best_flights", ["departure_airport_id"], name: "index_best_flights_on_departure_airport_id", using: :btree
+  add_index "best_flights", ["full_date"], name: "index_best_flights_on_full_date", using: :btree
+
+  create_table "cities", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.integer  "country_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "flights", force: :cascade do |t|
+    t.integer  "departure_airport_id", null: false
+    t.integer  "departure_city_id"
+    t.integer  "arrival_airport_id",   null: false
+    t.integer  "arrival_city_id"
+    t.integer  "month",                null: false
+    t.date     "full_date",            null: false
+    t.integer  "price",                null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "flights", ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id", using: :btree
+  add_index "flights", ["departure_airport_id"], name: "index_flights_on_departure_airport_id", using: :btree
+  add_index "flights", ["full_date"], name: "index_flights_on_full_date", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           null: false
