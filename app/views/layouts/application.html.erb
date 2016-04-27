@@ -8,7 +8,26 @@
 </head>
 <body>
 
-<%= yield %>
+  <div class="errors">
+    <% if flash[:errors] %>
+      <% flash[:errors].each do |error| %>
+        <%= error %>
+        <br/>
+      <% end %>
+    <% end %>
+    </div>
 
+    <% if current_user %>
+      <form class="sign-out-form group" action="<%= session_url %>" method="post">
+        <input type="hidden" name="_method" value="delete">
+
+        <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+
+        <button class="sign-out">Sign Out</button>
+      </form>
+    <% end %>
+
+    <%= yield %>
+    
 </body>
 </html>
