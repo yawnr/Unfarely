@@ -5,6 +5,8 @@ gem 'selenium-webdriver'
 gem 'chromedriver-helper'
 gem 'bcrypt'
 gem 'json'
+gem 'react-rails'
+gem 'flux-rails-assets'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
 # Use postgresql as the database for Active Record

@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
     has_many :alerts
     has_many :airports
     has_many :cities, through: :airports
+    has_many :trips
+    has_many :best_flights, through: :trips
 
     attr_reader :password
 

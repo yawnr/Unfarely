@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427134257) do
+ActiveRecord::Schema.define(version: 20160427164334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,18 @@ ActiveRecord::Schema.define(version: 20160427134257) do
   add_index "flights", ["arrival_airport_id"], name: "index_flights_on_arrival_airport_id", using: :btree
   add_index "flights", ["departure_airport_id"], name: "index_flights_on_departure_airport_id", using: :btree
   add_index "flights", ["full_date"], name: "index_flights_on_full_date", using: :btree
+
+  create_table "trips", force: :cascade do |t|
+    t.integer  "departure_airport_id", null: false
+    t.integer  "arrival_airport_id",   null: false
+    t.integer  "user_id",              null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "trips", ["arrival_airport_id"], name: "index_trips_on_arrival_airport_id", using: :btree
+  add_index "trips", ["departure_airport_id"], name: "index_trips_on_departure_airport_id", using: :btree
+  add_index "trips", ["user_id"], name: "index_trips_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           null: false

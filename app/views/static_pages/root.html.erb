@@ -1,0 +1,15 @@
+<div id="content">
+</div>
+
+<script type="text/javascript">
+
+  window.Unfarely = window.Unfarely || {};
+
+  window.Unfarely.currentUser = {
+    id: "<%= current_user.try(:id) || "null" %>"
+  }
+
+  window.Unfarely.images = {
+    logo: "<%= image_path('logo.png') %>",
+  }
+</script>
