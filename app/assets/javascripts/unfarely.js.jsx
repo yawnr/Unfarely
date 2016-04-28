@@ -11,19 +11,21 @@ $(function () {
         <div className="app">
           <nav>Hey nav</nav>
           {this.props.children}
-
         </div>
       );
     }
   });
 
-var routes = (
-  <Route path="/" component={App}>
-    <IndexRoute component={Test} />
-    <Route path="/users/:userId" component={Profile} />
-  </Route>
-);
+  var routes = (
+    <Route path="/" component={App}>
+      <IndexRoute component={Test} />
+      <Route path="/users/:userId" component={Profile} />
+      <Route path="/flights" component={AllFlights} />
+    </Route>
+  );
 
-React.render(<Router>{routes}</Router>, root);
+  if (!!root) {
+    React.render(<Router>{routes}</Router>, root);
+  }
 
 });

@@ -1,9 +1,5 @@
 var Test = React.createClass({
 
-  // componentDidMount: function () {
-  //   this.render();
-  // },
-
   render: function () {
     return (
       <div>
@@ -12,4 +8,4 @@ var Test = React.createClass({
       </div>
     );
   }
-})
+});

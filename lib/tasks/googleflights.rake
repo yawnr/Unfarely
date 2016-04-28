@@ -1,6 +1,6 @@
 task :nycla => :environment do
 
-  NUM_MONTHS = 6
+  NUM_MONTHS = 1
 
   driver = Selenium::WebDriver.for(:chrome)
 
@@ -27,8 +27,18 @@ task :nycla => :environment do
     driver.find_element(:class, 'datePickerNextButton').click
   end
 
+  driver.quit
+  
   puts all_prices
 
-  driver.quit
+  day = 28
+  3.times do |idx|
+    date = Date.new(2016,4,day)
+    price = all_prices['Month_1'][idx][/\d+/].to_i
+    Flight.create({departure_airport_id: 1, arrival_airport_id: 1, month: 4, full_date: date, price: price})
+    day += 1
+  end
+
+
 
 end

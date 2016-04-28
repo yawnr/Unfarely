@@ -1,8 +1,4 @@
 var Profile = React.createClass({
-  //
-  // componentDidMount: function () {
-  //   this.render();
-  // },
 
   render: function () {
     return (
@@ -12,4 +8,4 @@ var Profile = React.createClass({
       </div>
     );
   }
-})
+});
