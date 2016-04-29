@@ -114,15 +114,16 @@ task :nyc => :environment do
 
         best_prices_by_month[MONTHS[month_two][:name]][:num_similar] = num_similar_two
 
-        driver.find_element(:class, 'datePickerNextButton').click
-        sleep(5)
-        driver.find_element(:class, 'datePickerNextButton').click
+        if (x + 1) != TIMES_TO_PAGINATE
+          driver.find_element(:class, 'datePickerNextButton').click
+          sleep(5)
+          driver.find_element(:class, 'datePickerNextButton').click
 
-        month_one = next_month(next_month(month_one))
+          month_one = next_month(next_month(month_one))
+        end
       end
 
       puts best_prices_by_month
-byebug
     end
   end
 
