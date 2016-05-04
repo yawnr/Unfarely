@@ -124,6 +124,10 @@ task :nyc => :environment do
       end
 
       puts best_prices_by_month
+      # add a trip_string field to the trip model and the best_flight model, and check here if an entry with this
+      # trip string exists. If it does, update it with the lowest price here. If it doesn't, create it.
+      # Trip string should look something line JFK,LAG,EWR-SYD-9, which would indicate the best flight from
+      # NYC to Sydney in September
     end
   end
 
