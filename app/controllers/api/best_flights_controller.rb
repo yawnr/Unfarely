@@ -2,7 +2,7 @@ class Api::BestFlightsController < ApplicationController
 
   def index
     if current_user
-      @best_flights = current_user.trips.best_flights
+      @best_flights = BestFlight.all
     else
       @best_flights = BestFlight.all.limit(25)
     end
