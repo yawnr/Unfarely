@@ -9,7 +9,7 @@ $(function () {
     render: function () {
       return (
         <div className="app">
-          <nav>Hey nav</nav>
+          <Nav />
           {this.props.children}
         </div>
       );
