@@ -7,7 +7,9 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 Country.create({name: 'United States'})
+Country.create({name: 'Australia'})
 City.create({name: 'New York City', country_id: 1})
+City.create({name: 'Sydney', country_id: 2})
 Airport.create({code: 'NYC', name: 'NYC - all airports', city_id: 1, search_string: 'JFK,LGA,EWR'})
 Airport.create({code: 'JFK', name: "JFK International Airport", city_id: 1, search_string: 'JFK'})
 Airport.create({code: 'LGA', name: "Laguardia International Airport", city_id: 1, search_string: 'LGA'})

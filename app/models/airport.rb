@@ -1,5 +1,5 @@
 class Airport < ActiveRecord::Base
 
-  belongs_to :cities
-  
+  belongs_to :city
+
 end
