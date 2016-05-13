@@ -13,8 +13,8 @@ MONTHS = {
   12 => {name: 'December', num_days: 31}
 }
 
-ORIGINATIONS = ['JFK,EWR,LGA'] #, 'ORD,MDW', 'LAX', 'SFO', 'ATL', 'IAD,DCA,BWI']
-DESTINATIONS = ['SYD', 'CHC', 'HND,NRT'] #, 'MEL', 'AKL', 'KEF,RKV', 'BKK,DMK', 'LHR,LGW,LCY,STN,LTN,QQS', 'CDG,ORY,BVA,XHP,XPG']
+# ORIGINATIONS = ['NYC'] #, 'ORD,MDW', 'LAX', 'SFO', 'ATL', 'IAD,DCA,BWI']
+# DESTINATIONS = ['SYD'] #, 'MEL', 'AKL', 'KEF,RKV', 'BKK,DMK', 'LHR,LGW,LCY,STN,LTN,QQS', 'CDG,ORY,BVA,XHP,XPG']
 TIMES_TO_PAGINATE = 2
 
 def next_month(month)
@@ -25,16 +25,42 @@ def next_month(month)
   end
 end
 
-task :nyc => :environment do
+def get_year(month)
+  if month < Time.now.month
+    year = Time.now.year + 1
+  else
+    year = Time.now.year
+  end
 
-  driver = Selenium::WebDriver.for(:chrome)
+  return year
+end
+
+def get_us_airports
+  Country.find_by_name("United States").airports
+end
+
+def build_url(origination, destination)
   start_date = "#{Time.now.strftime('%Y-%m-%d')}"
   end_date = "#{(Time.now + 1000000).strftime('%Y-%m-%d')}"
+  url = "http://www.google.com/flights/#search;f=#{origination.search_string};t=#{destination.search_string};d=#{start_date};r=#{end_date}"
+  return url
+end
 
-  ORIGINATIONS.each do |origination|
-    DESTINATIONS.each do |destination|
-      driver.navigate.to("http://www.google.com/flights/#search;f=#{origination};t=#{destination};d=#{start_date};r=#{end_date}")
+task :flights => :environment do
+
+  originations = get_us_airports
+  destinations = Airport.all
+
+  driver = Selenium::WebDriver.for(:chrome)
+
+  originations.each do |origination|
+    destinations.each do |destination|
+
+      next if origination.city_id == destination.city_id
+
+      driver.navigate.to(build_url(origination, destination))
       sleep(5)
+
       date_inputs = driver.find_elements(:class, 'MHNSJI-H-q')
       date_inputs[0].click
 
@@ -43,13 +69,10 @@ task :nyc => :environment do
       month_one = Time.now.month
 
       TIMES_TO_PAGINATE.times do |x|
-        if month_one < Time.now.month
-          year = Time.now.year + 1
-        else
-          year = Time.now.year
-        end
-
+        year_one = get_year(month_one)
         month_two = next_month(month_one)
+        year_two = get_year(month_two)
+
         days_month_one = MONTHS[month_one][:num_days]
         days_month_two = MONTHS[month_two][:num_days]
 
@@ -70,9 +93,9 @@ task :nyc => :environment do
 
           month_one_prices.push(price)
 
-          best_price_month_one = best_prices_by_month[MONTHS[month_one][:name]]
+          best_price_month_one = best_prices_by_month[month_one]
           if !best_price_month_one || (price < best_price_month_one[:price])
-            best_prices_by_month[MONTHS[month_one][:name]] ={price: price, date: Date.new(year, month_one, day)}
+            best_prices_by_month[month_one] ={price: price, date: Date.new(year_one, month_one, day)}
           end
         end
 
@@ -87,9 +110,9 @@ task :nyc => :environment do
 
           month_two_prices.push(price)
 
-          best_price_month_two = best_prices_by_month[MONTHS[month_two][:name]]
+          best_price_month_two = best_prices_by_month[month_two]
           if !best_price_month_two || (price < best_price_month_two[:price])
-            best_prices_by_month[MONTHS[month_two][:name]] = {price: price, date: Date.new(year, month_two, day)}
+            best_prices_by_month[month_two] = {price: price, date: Date.new(year_two, month_two, day)}
           end
         end
 
@@ -97,22 +120,22 @@ task :nyc => :environment do
         num_similar_two = 0
 
         month_one_prices.each do |price|
-          best = best_prices_by_month[MONTHS[month_one][:name]][:price].to_f
+          best = best_prices_by_month[month_one][:price].to_f
           if ((best - price.to_f) / best).abs < 0.1
             num_similar_one += 1
           end
         end
 
-        best_prices_by_month[MONTHS[month_one][:name]][:num_similar] = num_similar_one
+        best_prices_by_month[month_one][:num_similar] = num_similar_one
 
         month_two_prices.each do |price|
-          best = best_prices_by_month[MONTHS[month_two][:name]][:price].to_f
+          best = best_prices_by_month[month_two][:price].to_f
           if ((best - price.to_f) / best).abs < 0.1
             num_similar_two += 1
           end
         end
 
-        best_prices_by_month[MONTHS[month_two][:name]][:num_similar] = num_similar_two
+        best_prices_by_month[month_two][:num_similar] = num_similar_two
 
         if (x + 1) != TIMES_TO_PAGINATE
           driver.find_element(:class, 'datePickerNextButton').click
@@ -123,19 +146,23 @@ task :nyc => :environment do
         end
       end
 
-      puts best_prices_by_month
-      # add a trip_string field to the trip model and the best_flight model, and check here if an entry with this
-      # trip string exists. If it does, update it with the lowest price here. If it doesn't, create it.
-      # Trip string should look something line JFK,LAG,EWR-SYD-9, which would indicate the best flight from
-      # NYC to Sydney in September
+      best_prices_by_month.each do |month, flight|
+        trip_string = "#{origination.code}-#{destination.code}-#{month}"
+        current_record = BestFlight.find_by_trip_string(trip_string)
+        if current_record
+          current_record.update({departure_airport_id: origination.id, departure_city_id: origination.city_id,
+            arrival_airport_id: destination.id,  arrival_city_id: destination.city_id, trip_string: trip_string,
+            month: month, full_date: flight[:date], price: flight[:price], num_similar: flight[:num_similar]})
+        else
+          BestFlight.create({departure_airport_id: origination.id, departure_city_id: origination.city_id,
+            arrival_airport_id: destination.id,  arrival_city_id: destination.city_id, trip_string: trip_string,
+            month: month, full_date: flight[:date], price: flight[:price], num_similar: flight[:num_similar]})
+        end
+      end
+
     end
   end
 
 driver.quit
-
-
-
-    #   date = Date.new(2016,4,day)
-    #   Flight.create({departure_airport_id: 1, arrival_airport_id: 1, month: 4, full_date: date, price: price})
 
 end

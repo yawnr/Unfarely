@@ -35,8 +35,7 @@ class Api::BestFlightsController < ApplicationController
 
   private
   def bestflight_params
-    # add num similar dates here via a migration
-    params.require(:best_flight).permit(:departure_airport_id, :arrival_airport_id, :month, :full_date, :price)
+    params.require(:best_flight).permit(:departure_airport_id, :arrival_airport_id, :month, :full_date, :price, :num_similar)
   end
 
 end

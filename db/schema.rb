@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160427164334) do
+ActiveRecord::Schema.define(version: 20160513132838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,8 @@ ActiveRecord::Schema.define(version: 20160427164334) do
     t.integer  "price",                null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
+    t.integer  "num_similar"
+    t.string   "trip_string",          null: false
   end
 
   add_index "best_flights", ["arrival_airport_id"], name: "index_best_flights_on_arrival_airport_id", using: :btree
@@ -86,11 +88,14 @@ ActiveRecord::Schema.define(version: 20160427164334) do
   add_index "flights", ["full_date"], name: "index_flights_on_full_date", using: :btree
 
   create_table "trips", force: :cascade do |t|
-    t.integer  "departure_airport_id", null: false
-    t.integer  "arrival_airport_id",   null: false
-    t.integer  "user_id",              null: false
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.integer  "departure_airport_id",                 null: false
+    t.integer  "arrival_airport_id",                   null: false
+    t.integer  "user_id",                              null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+    t.boolean  "alert",                default: false, null: false
+    t.integer  "alert_price"
+    t.string   "trip_string",                          null: false
   end
 
   add_index "trips", ["arrival_airport_id"], name: "index_trips_on_arrival_airport_id", using: :btree

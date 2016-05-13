@@ -36,9 +36,8 @@ class Api::TripsController < ApplicationController
 
   private
   def trip_params
-    # add :alert (boolean) and :alert_price (integer) via new migration
     # maybe add a date range?
-    params.require(:trip).permit(:departure_airport_id, :arrival_airport_id, :user_id)
+    params.require(:trip).permit(:departure_airport_id, :arrival_airport_id, :user_id, :alert, :alert_price)
   end
 
 end
