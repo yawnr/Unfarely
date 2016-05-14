@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160513132838) do
+ActiveRecord::Schema.define(version: 20160514102633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,6 +52,10 @@ ActiveRecord::Schema.define(version: 20160513132838) do
     t.datetime "updated_at",           null: false
     t.integer  "num_similar"
     t.string   "trip_string",          null: false
+    t.boolean  "round_trip",           null: false
+    t.string   "source",               null: false
+    t.date     "return_date"
+    t.integer  "trip_length",          null: false
   end
 
   add_index "best_flights", ["arrival_airport_id"], name: "index_best_flights_on_arrival_airport_id", using: :btree
