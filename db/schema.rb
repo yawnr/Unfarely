@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160514102633) do
+ActiveRecord::Schema.define(version: 20160617193126) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,7 +46,7 @@ ActiveRecord::Schema.define(version: 20160514102633) do
     t.integer  "arrival_airport_id",   null: false
     t.integer  "arrival_city_id"
     t.integer  "month",                null: false
-    t.date     "full_date",            null: false
+    t.date     "departure_date",       null: false
     t.integer  "price",                null: false
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 20160514102633) do
 
   add_index "best_flights", ["arrival_airport_id"], name: "index_best_flights_on_arrival_airport_id", using: :btree
   add_index "best_flights", ["departure_airport_id"], name: "index_best_flights_on_departure_airport_id", using: :btree
-  add_index "best_flights", ["full_date"], name: "index_best_flights_on_full_date", using: :btree
+  add_index "best_flights", ["departure_date"], name: "index_best_flights_on_departure_date", using: :btree
 
   create_table "cities", force: :cascade do |t|
     t.string   "name",       null: false

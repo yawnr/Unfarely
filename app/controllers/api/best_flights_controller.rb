@@ -35,7 +35,7 @@ class Api::BestFlightsController < ApplicationController
 
   private
   def bestflight_params
-    params.require(:best_flight).permit(:departure_airport_id, :arrival_airport_id, :month, :full_date, :price, :num_similar)
+    params.require(:best_flight).permit(:departure_airport_id, :arrival_airport_id, :month, :departure_date, :price, :num_similar)
   end
 
 end
